@@ -1,0 +1,70 @@
+import 'package:bytebank2/components/centered_message.dart';
+import 'package:bytebank2/components/progress.dart';
+import 'package:bytebank2/http/webclients/transaction_webclient.dart';
+import 'package:bytebank2/models/transacao.dart';
+import 'package:flutter/material.dart';
+
+class TransactionsList extends StatelessWidget {
+
+  final TransactionWebClient _webClient = TransactionWebClient();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Transações'),
+      ),
+      body: FutureBuilder<List<Transacao>>(
+        future: _webClient.findAll(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return Progress();
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              if(snapshot.hasData){
+                final List<Transacao> transacoes = snapshot.data;
+                if (transacoes.isNotEmpty) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      final Transacao transacao = transacoes[index];
+                      return Card(
+                        child: ListTile(
+                          leading: Icon(Icons.monetization_on),
+                          title: Text(
+                            transacao.valor.toString(),
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            transacao.contato.numeroContaContato.toString(),
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: transacoes.length,
+                  );
+                }
+              }
+
+              return CenteredMessage('Nenhuma transação encontrada',icon: Icons.warning,);
+              break;
+          }
+          return CenteredMessage(
+            'Unknown error',
+            icon: Icons.warning_amber_outlined,
+          );
+        },
+      ),
+    );
+  }
+}

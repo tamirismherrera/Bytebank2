@@ -37,8 +37,9 @@ class _ContactFormState extends State<ContactForm> {
             controlador: _controladorCampoNumeroContaContato,
           ),
           // ignore: deprecated_member_use
-          RaisedButton(
+          ElevatedButton(
             child: Text('Adicionar'),
+              style: ElevatedButton.styleFrom(primary: Colors.cyan[900]),
             onPressed: () {
               final String nomeContato = _controladorCampoNomeContato.text;
               final int numeroContaContato = int.tryParse(_controladorCampoNumeroContaContato.text);

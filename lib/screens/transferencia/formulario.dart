@@ -45,8 +45,7 @@ class _FormularioTransferenciaState extends State<FormularioTransferencia> {
               icone: Icons.monetization_on,
               keyboardType: TextInputType.number
             ),
-            // ignore: deprecated_member_use
-            RaisedButton(
+            ElevatedButton(
               child: Text(_textoBotaoConfirmar),
               onPressed: () => _criaTransferencia(context),
             ),
